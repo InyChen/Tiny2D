@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/InyChen/Tiny2D/issues"
   },
-  "homepage": "https://github.com/InyChen/Tiny2D#readme"
+  "homepage": "https://github.com/InyChen/Tiny2D#readme",
+  "devDependencies": {
+    "webpack": "^2.4.1"
+  }
 }
