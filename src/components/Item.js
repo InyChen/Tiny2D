@@ -30,20 +30,29 @@ export default class Item {
         if (this.currentAnimate) {
             let finish = true;
             for (let x in this.currentAnimate.target) {
-                this[x] = Math.floor(
-                    this.currentAnimate.func(
-                        time - this.currentAnimate.startTime,
-                        this.currentAnimate.startStatus[x],
-                        this.currentAnimate.target[x] - this.currentAnimate.startStatus[x],
-                        this.currentAnimate.duration
-                    )
-                );
+                //如果已经超出过渡时间,直接变为目标状态
+                if (
+                    time - this.currentAnimate.startTime > this.currentAnimate.duration
+                ) {
+                    this[x] = this.currentAnimate.target[x];
+                } else {
+                    this[x] = Math.floor(
+                        this.currentAnimate.func(
+                            time - this.currentAnimate.startTime,
+                            this.currentAnimate.startStatus[x],
+                            this.currentAnimate.target[x] -
+                            this.currentAnimate.startStatus[x],
+                            this.currentAnimate.duration
+                        )
+                    );
+                }
+
                 if (this[x] != this.currentAnimate.target[x]) {
                     finish = false;
                 }
             }
             if (finish) {
-                console.log("animate finish");
+                this.currentAnimate.callback(this);
                 this.currentAnimate = null;
             }
         }

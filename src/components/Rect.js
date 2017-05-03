@@ -1,4 +1,4 @@
-import Item from "./Item"
+import Item from "./Item";
 
 export default class Rect extends Item {
     constructor({ x, y, height, width, background, border } = {}) {
@@ -7,5 +7,10 @@ export default class Rect extends Item {
         this.height = height;
         this.background = background;
         this.border = border;
+    }
+
+    drawTo(ctx) {
+        ctx.fillStyle = this.background;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
