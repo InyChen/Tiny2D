@@ -3,7 +3,7 @@ import Rect from "./components/Rect";
 import ImageView from "./components/ImageView";
 import Tween from "./components/Tween";
 
-const girlImageUrl = require("./static/xiaoer.jpg");
+const girlImageUrl = require("./static/imgs/bg.jpg");
 let img = new Image();
 img.src = girlImageUrl;
 let context;
@@ -30,16 +30,16 @@ let formated = false;
 canvas.addEventListener("click", function() {
     console.log(formated);
     if (!stage.objectList || stage.objectList.length == 0) {
-        for (let i = 0; i < 1600; i++) {
-            let x = Math.floor(i % 40),
-                y = Math.floor(Math.floor(i / 40));
+        for (let i = 0; i < 100; i++) {
+            let x = Math.floor(i % 10),
+                y = Math.floor(Math.floor(i / 10));
 
-            let spriteData = context.getImageData(x * 10, y * 10, 10, 10);
+            let spriteData = context.getImageData(x * 40, y * 40, 40, 40);
             let imageView = new ImageView({
                 x: Math.floor((maxWidth - 10) * Math.random()),
                 y: Math.floor((maxHeight - 10) * Math.random()),
-                height: 10,
-                width: 10,
+                height: 40,
+                width: 40,
                 imgData: spriteData
             });
 
@@ -63,10 +63,10 @@ canvas.addEventListener("click", function() {
         formated = false;
     } else {
         for (let i = 0; i < stage.objectList.length; i++) {
-            let x = Math.floor(i % 40),
-                y = Math.floor(Math.floor(i / 40));
+            let x = Math.floor(i % 10),
+                y = Math.floor(Math.floor(i / 10));
 
-            stage.objectList[i].moveTo({ x: x * 10 + 100, y: y * 10 + 100 },
+            stage.objectList[i].moveTo({ x: x * 40 + 100, y: y * 40 + 100 },
                 3000,
                 Tween.Cubic.easeInOut,
                 function(r) {
