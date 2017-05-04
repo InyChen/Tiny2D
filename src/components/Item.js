@@ -52,7 +52,7 @@ export default class Item {
                 }
             }
             if (finish) {
-                this.currentAnimate.callback(this);
+                this.currentAnimate.callback && this.currentAnimate.callback(this);
                 this.currentAnimate = null;
             }
         }

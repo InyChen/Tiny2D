@@ -1,5 +1,5 @@
 export default class Stage {
-    constructor({ canvas, height, width, background }) {
+    constructor({ canvas, height, width, background, debug }) {
         this.height = canvas.height = height;
         this.width = canvas.width = width;
         this.background = background || "transparent";
@@ -7,6 +7,7 @@ export default class Stage {
         this.ctx.fillStyle = this.background;
         this.ctx.fillRect(0, 0, width, height);
         this.objectList = [];
+        this.debug = debug || true;
     }
 
     addObject(...objs) {
@@ -26,10 +27,17 @@ export default class Stage {
             element.update(time);
             element.drawTo(this.ctx);
         });
+
         time = new Date().getTime() - time;
 
-        console.log(
-            `${this.objectList.length} objects rendered,update finished in ${time}ms`
-        );
+        if (this.debug) {
+            let fps = Math.round(time < 16.667 ? 60 : 1000 / time, 2);
+            this.ctx.fillStyle = "rgba(255,255,255,0.5)";
+            this.ctx.fillRect(0, 0, 200, 60);
+            this.ctx.fillStyle = "#000000";
+            this.ctx.font = "14px serif";
+            this.ctx.fillText(`rendered:${this.objectList.length} objects`, 10, 20);
+            this.ctx.fillText(`cost:${time} ms,${fps} fps`, 10, 40);
+        }
     }
 }
