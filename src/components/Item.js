@@ -7,6 +7,33 @@ export default class Item {
         this.y = y;
         this.animateList = [];
         this.currentAnimate = null;
+        this.eventListenerPool = {};
+    }
+
+    //判断点是否在元素区域内
+    containsPoint(x, y) {
+        return x == this.x && y == this.y;
+    }
+
+    //点击事件
+    onClick(x, y) {
+        let listeners = this.eventListenerPool["click"];
+        let stop = false;
+        listeners &&
+            listeners.forEach(callback => {
+                if (!stop) {
+                    stop = callback.call(this, x, y);
+                }
+            });
+        return stop;
+    }
+
+    //提供事件绑定
+    on(eventName, callback) {
+        if (this.eventListenerPool[eventName] == null) {
+            this.eventListenerPool[eventName] = [];
+        }
+        this.eventListenerPool[eventName].push(callback);
     }
 
     moveTo(target, duration, func, callback) {

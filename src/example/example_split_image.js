@@ -64,14 +64,17 @@ function addTiles() {
             imgData: spriteData
         });
 
+        imageView.on("click", function() {
+            console.log("clicked:" + this.x);
+            return true;
+        });
         stage.addObject(imageView);
     }
     formated = true;
-    setInterval(() => {
-        canvas.click();
-    }, 4500);
+    setInterval(toggleImage, 4500);
 }
-canvas.addEventListener("click", function() {
+
+function toggleImage() {
     for (let i = 0; i < stage.objectList.length; i++) {
         if (formated) {
             stage.objectList[i].moveTo({
@@ -92,7 +95,7 @@ canvas.addEventListener("click", function() {
         }
     }
     formated = !formated;
-});
+}
 
 let move = () => {
     stage.update();

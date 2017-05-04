@@ -11,4 +11,14 @@ export default class ImageView extends Item {
     drawTo(ctx) {
         ctx.putImageData(this.imgData, this.x, this.y);
     }
+
+    //判断点是否在元素区域内
+    containsPoint(x, y) {
+        return (
+            x >= this.x &&
+            y >= this.y &&
+            x <= this.x + this.width &&
+            y <= this.y + this.height
+        );
+    }
 }

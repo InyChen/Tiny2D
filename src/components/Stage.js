@@ -8,6 +8,19 @@ export default class Stage {
         this.ctx.fillRect(0, 0, width, height);
         this.objectList = [];
         this.debug = debug || true;
+
+        canvas.addEventListener("click", e => {
+            this.onClick.call(this, e);
+        });
+    }
+
+    onClick(e) {
+        let stop = false;
+        this.objectList.forEach(obj => {
+            if (!stop && obj.containsPoint(e.offsetX, e.offsetY)) {
+                stop = obj.onClick(e.offsetX, e.offsetY);
+            }
+        });
     }
 
     addObject(...objs) {
