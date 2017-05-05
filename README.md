@@ -32,3 +32,4 @@ for (let i = 0; i < 20; i++) {
 ```js
 stage.start();
 ```
+5. [Live Demo](http://2d.stdmob.com/ "Click to view Live Demo")
