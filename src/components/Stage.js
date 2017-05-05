@@ -43,6 +43,11 @@ export default class Stage {
         }
     }
 
+    showOnTop(obj) {
+        obj.z = this.maxZ;
+        this.maxZ++;
+    }
+
     addObject(...objs) {
         objs.forEach(obj => {
             obj.parent = this;
