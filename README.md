@@ -21,7 +21,7 @@ for (let i = 0; i < 20; i++) {
         y: i * 20 + 100,
         width: 100,
         height: 100,
-        background: ```rgba(${i * 12},${i * 12},${i * 12},1)```
+        background: `rgba(${i * 12},${i * 12},${i * 12},1)`
     });
     rect.on("mousemove", function(e) {
         stage.showOnTop(this);
