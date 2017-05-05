@@ -2,9 +2,11 @@
  * 所有对象的基类
  */
 export default class Item {
-    constructor({ x = 0, y = 0 } = {}) {
+    constructor({ x = 0, y = 0, z = 0 } = {}) {
         this.x = x;
         this.y = y;
+        this.z = z;
+        this._z = z;
         this.animateList = [];
         this.currentAnimate = null;
         this.eventListenerPool = {};
@@ -16,15 +18,15 @@ export default class Item {
     }
 
     //点击事件
-    onClick(x, y) {
-        let listeners = this.eventListenerPool["click"];
-        let stop = false;
-        listeners &&
+    trigger(e) {
+        let listeners = this.eventListenerPool[e.eventName];
+        if (listeners) {
             listeners.forEach(callback => {
-                if (!stop) {
-                    stop = callback.call(this, x, y);
+                if (!e.isStop) {
+                    callback.call(this, e);
                 }
             });
+        }
         return stop;
     }
 

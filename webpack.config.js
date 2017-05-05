@@ -43,6 +43,7 @@ module.exports = {
             }
         ]
     },
+    devtool: "#cheap-module-eval-source-map",
     plugins: htmlWebpackPluginArr.concat([
         new HtmlWebpackPlugin({
             filename: "index.html", //输出的html文件

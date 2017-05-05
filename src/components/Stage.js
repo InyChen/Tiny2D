@@ -1,7 +1,9 @@
+import Event from "./Event";
+
 export default class Stage {
     constructor({ canvas, height, width, background, debug }) {
-        this.height = canvas.height = height;
-        this.width = canvas.width = width;
+        this.height = canvas.height = height || document.body.offsetHeight;
+        this.width = canvas.width = width || document.body.offsetWidth;
         this.background = background || "transparent";
         this.ctx = canvas.getContext("2d");
         this.ctx.fillStyle = this.background;
@@ -9,25 +11,78 @@ export default class Stage {
         this.objectList = [];
         this.debug = debug || true;
 
+        this.maxZ = 0;
+
+        this.autoUpdate = false;
+
         canvas.addEventListener("click", e => {
-            this.onClick.call(this, e);
+            this.eventHandler.call(this, e);
+        });
+        canvas.addEventListener("mousemove", e => {
+            this.eventHandler.call(this, e);
         });
     }
 
-    onClick(e) {
-        let stop = false;
-        this.objectList.forEach(obj => {
-            if (!stop && obj.containsPoint(e.offsetX, e.offsetY)) {
-                stop = obj.onClick(e.offsetX, e.offsetY);
-            }
+    eventHandler(e) {
+        let event = new Event({
+            eventName: e.type,
+            x: e.offsetX,
+            y: e.offsetY,
+            originEvent: e
         });
+        this.trigger.call(this, event);
+    }
+
+    trigger(e) {
+        for (let i = this.objectList.length - 1; i >= 0; i--) {
+            let obj = this.objectList[i];
+            if (obj.containsPoint && obj.containsPoint(e.x, e.y)) {
+                obj.trigger(e);
+                break;
+            }
+        }
     }
 
     addObject(...objs) {
         objs.forEach(obj => {
             obj.parent = this;
+            if (obj._z == 0) {
+                obj.z = this.maxZ;
+                this.maxZ++;
+            }
             this.objectList.push(obj);
         });
+        this.objectList.sort((a, b) => {
+            return a.z - b.z;
+        });
+    }
+    removeObject(obj) {
+        let index = this.objectList.indexOf(obj);
+        if (!isNaN(index)) {
+            return this.objectList.splice(index, 1);
+        }
+    }
+
+    start() {
+        this.autoUpdate = true;
+        this._autoupdate();
+    }
+
+    stop() {
+        this.autoUpdate = true;
+    }
+
+    pause() {
+        this.autoUpdate = true;
+    }
+
+    _autoupdate() {
+        this.update();
+        if (this.autoUpdate) {
+            requestAnimationFrame(() => {
+                this._autoupdate();
+            });
+        }
     }
 
     update() {
