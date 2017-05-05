@@ -18,7 +18,7 @@ let stage = new Stage({
             height: 100,
             background: `rgba(${i * 12},${i * 12},${i * 12},1)`
         });
-        rect.on("mousemove", function(x, y) {
+        rect.on("mousemove", function(e) {
             stage.showOnTop(this);
             return false;
         });

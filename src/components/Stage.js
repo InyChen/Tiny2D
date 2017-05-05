@@ -44,8 +44,13 @@ export default class Stage {
     }
 
     showOnTop(obj) {
-        obj.z = this.maxZ;
-        this.maxZ++;
+        if (obj.z < this.maxZ - 1) {
+            obj.z = this.maxZ;
+            this.maxZ++;
+            this.objectList.sort((a, b) => {
+                return a.z - b.z;
+            });
+        }
     }
 
     addObject(...objs) {
