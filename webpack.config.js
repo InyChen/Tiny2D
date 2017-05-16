@@ -6,19 +6,34 @@ const glob = require("glob");
 //自动添加示例页面
 let htmlWebpackPluginArr = [];
 let htmlEntrys = {};
-let files = glob.sync("./src/example/*.html", {});
-if (files) {
-    files.forEach(file => {
-        let fileName = file.substr(file.lastIndexOf("/") + 1).replace(".html", "");
-        htmlEntrys[fileName] = `./src/example/${fileName}.js`;
-        htmlWebpackPluginArr.push(
-            new HtmlWebpackPlugin({
-                filename: `${fileName}.html`, //输出的html文件
-                template: `./src/example/${fileName}.html`, //模板html,在此基础上添加js
-                chunks: [fileName]
-            })
-        );
-    });
+
+if (process.env.NODE_ENV.indexOf("product") >= 0) {
+    console.log(">>>>>>>>>>>start product package");
+
+    let files = glob.sync("./src/example/*.html", {});
+    if (files) {
+        files.forEach(file => {
+            let fileName = file.substr(file.lastIndexOf("/") + 1).replace(".html", "");
+            htmlEntrys[fileName] = `./src/example/${fileName}.js`;
+            htmlWebpackPluginArr.push(
+                new HtmlWebpackPlugin({
+                    filename: `${fileName}.html`, //输出的html文件
+                    template: `./src/example/${fileName}.html`, //模板html,在此基础上添加js
+                    chunks: [fileName]
+                })
+            );
+        });
+    }
+} else {
+    console.log(">>>>>>>>>>>start development package");
+    htmlWebpackPluginArr.push(
+        new HtmlWebpackPlugin({
+            filename: 'example_path.html',
+            template: './src/example/example_path.html',
+            chunks: ['example_path']
+        })
+    );
+    htmlEntrys['example_path'] = './src/example/example_path.js';
 }
 
 module.exports = {
@@ -55,5 +70,14 @@ module.exports = {
                 warnings: false
             }
         })
-    ])
+    ]),
+    devServer: {
+        inline: true,
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: 1000
+        },
+        host: "0.0.0.0",
+        historyApiFallback: true
+    }
 };

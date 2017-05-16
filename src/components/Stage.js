@@ -15,6 +15,8 @@ export default class Stage {
 
         this.autoUpdate = false;
 
+        this.mouseOverObject = null;
+
         canvas.addEventListener("click", e => {
             this.eventHandler.call(this, e);
         });
@@ -34,9 +36,40 @@ export default class Stage {
     }
 
     trigger(e) {
+
+        if (e.eventName == "mousemove") {
+            if (this.mouseOverObject && this.mouseOverObject.containsPoint && !this.mouseOverObject.containsPoint(e.x, e.y)) {
+                let event = new Event({
+                    eventName: "mouseout",
+                    x: e.x,
+                    y: e.y,
+                    originEvent: e.originEvent
+                });
+                this.mouseOverObject.trigger(event);
+                this.mouseOverObject = null;
+            }
+        }
+
         for (let i = this.objectList.length - 1; i >= 0; i--) {
             let obj = this.objectList[i];
             if (obj.containsPoint && obj.containsPoint(e.x, e.y)) {
+                if (e.eventName == "mousemove") {
+                    if (this.mouseOverObject != null) {
+                        let event = new Event({
+                            eventName: "mouseout",
+                            x: e.x,
+                            y: e.y,
+                            originEvent: e.originEvent
+                        });
+                        this.mouseOverObject.trigger(event);
+                        this.mouseOverObject = null;
+                    }
+                    if (this.mouseOverObject != obj) {
+                        e.eventName = "mouseover";
+                        this.mouseOverObject = obj;
+                    }
+                }
+
                 obj.trigger(e);
                 break;
             }

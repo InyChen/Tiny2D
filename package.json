@@ -4,8 +4,8 @@
     "description": "a light weight 2d engine",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack-dev-server --inline --watch --host 0.0.0.0 --history-api-fallback",
-        "build": "webpack --progress --hide-modules",
+        "dev": "set NODE_ENV=development && webpack-dev-server",
+        "build": "set NODE_ENV=product && webpack --progress --hide-modules",
         "test": "node ./src/test.js"
     },
     "repository": {
